@@ -340,11 +340,24 @@ final class Client implements Contracts\Client
         }
 
 
+        if ($method == 'public/Depth'){
         $response = $this->client->request('POST', self::API_URL . $this->buildPath($method), [
+            $response = $this->client->request('GET', self::API_URL . $this->buildPath($method), [
             'headers' => $headers,
+                'headers' => $headers,
             'form_params' => $parameters,
+                'query' => $parameters,
             'verify' => true
+                'verify' => true
         ]);
+            ]);
+        } else {
+            $response = $this->client->request('POST', self::API_URL . $this->buildPath($method), [
+                'headers' => $headers,
+                'form_params' => $parameters,
+                'verify' => true
+            ]);
+        }
 
         $responseObject = $this->serializer->deserialize(
             $response->getBody()->getContents(),
