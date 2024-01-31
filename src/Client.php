@@ -339,12 +339,19 @@ final class Client implements Contracts\Client
             $headers['API-Sign'] = $this->makeSignature($method, $parameters);
         }
 
-
-        $response = $this->client->request('POST', self::API_URL . $this->buildPath($method), [
-            'headers' => $headers,
-            'form_params' => $parameters,
-            'verify' => true
-        ]);
+        if ($method == 'public/Depth'){
+            $response = $this->client->request('GET', self::API_URL . $this->buildPath($method), [
+                'headers' => $headers,
+                'query' => $parameters,
+                'verify' => true
+            ]);
+        } else {
+            $response = $this->client->request('POST', self::API_URL . $this->buildPath($method), [
+                'headers' => $headers,
+                'form_params' => $parameters,
+                'verify' => true
+            ]);
+        }
 
         $responseObject = $this->serializer->deserialize(
             $response->getBody()->getContents(),
